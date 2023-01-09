@@ -1,11 +1,15 @@
 import React from 'react';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Homepage from "./pages/Homepage";
 
 function App() {
-  return (
-    <h1 className="text-3xl font-semibold bg-red-300">
-      Simple React Typescript Tailwind Sample
-    </h1>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                 <Route path='/home' element={< Homepage/>}/>
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
