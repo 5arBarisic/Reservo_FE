@@ -2,8 +2,7 @@ import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 import SliderItem from "./SliderItem";
 
-const Slider = () =>
-{
+const Slider = () => {
     const items = [
         {
             name: "Movie title #1",
@@ -16,9 +15,13 @@ const Slider = () =>
     ];
 
     return (
-        <Carousel height="400px" animation="fade" autoPlay={true} stopAutoPlayOnHover={true} duration={500} >
+        <Carousel navButtonsProps={{
+            style: {
+                backgroundColor: 'deepskyblue'
+            }
+        }} height="400px" animation="fade" autoPlay={true} stopAutoPlayOnHover={true} duration={500}>
             {
-                items.map( (item, i) => <SliderItem key={i} name={item.name} description={item.description}/> )
+                items.map((item, i) => <SliderItem key={i} name={item.name} description={item.description}/>)
             }
         </Carousel>
     );
