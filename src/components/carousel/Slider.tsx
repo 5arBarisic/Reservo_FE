@@ -3,14 +3,16 @@ import Carousel from 'react-material-ui-carousel';
 import SliderItem from "./SliderItem";
 
 const Slider = () => {
-    const items = [
+    const movies = [
         {
             name: "Movie title #1",
-            description: "Movie desc"
+            description: "Movie desc",
+            id: 1
         },
         {
             name: "Movie title #2",
-            description: "Movie desc"
+            description: "Movie desc",
+            id: 2
         }
     ];
 
@@ -21,7 +23,7 @@ const Slider = () => {
             }
         }} height="400px" animation="fade" autoPlay={true} stopAutoPlayOnHover={true} duration={500}>
             {
-                items.map((item, i) => <SliderItem key={i} name={item.name} description={item.description}/>)
+                movies.map((movie) => <SliderItem key={movie.id} name={movie.name} description={movie.description} id={movie.id}/>)
             }
         </Carousel>
     );

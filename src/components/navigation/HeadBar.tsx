@@ -14,11 +14,21 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import React from "react";
 import {GitHub, Instagram, Movie, Twitter} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
+import {Paths} from "../../routes/Paths";
 
 const pages = ['Home', 'Explore more', 'Contact us'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const HeadBar =()=>{
+type HeadBarProps = {
+    haveNav?: boolean;
+    haveBorder?: boolean;
+
+};
+
+const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
+
+    const navigate = useNavigate();
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -30,8 +40,9 @@ const HeadBar =()=>{
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = () => {
+    const handleCloseNavMenu = (page:string) => {
         setAnchorElNav(null);
+        if(page==='Home') navigate(Paths.Home);
     };
 
     const handleCloseUserMenu = () => {
@@ -39,18 +50,19 @@ const HeadBar =()=>{
     };
 
     return (
-        <AppBar sx={{background: "linear-gradient(0deg, rgba(0,0,0,0.1) 50%, rgba(2,0,36,1) 100%)"}} position="static">
+        // <AppBar sx={{background: "linear-gradient(0deg, rgba(0,0,0,0.1) 50%, rgba(2,0,36,1) 100%)"}} position="static">
+        <AppBar sx={{background: "none", boxShadow: haveBorder ? "color" : "none"}} position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <Movie sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                    <Movie sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
                     <Typography
                         variant="h6"
                         noWrap
                         component="a"
-                        href="/"
+                        href="/home"
                         sx={{
                             mr: 2,
-                            display: { xs: 'none', md: 'flex' },
+                            display: {xs: 'none', md: 'flex'},
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
@@ -61,7 +73,7 @@ const HeadBar =()=>{
                         RESERVO
                     </Typography>
 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                    <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
                         <IconButton
                             size="large"
                             aria-label="account of current user"
@@ -70,7 +82,7 @@ const HeadBar =()=>{
                             onClick={handleOpenNavMenu}
                             color="inherit"
                         >
-                            <MenuIcon />
+                            <MenuIcon/>
                         </IconButton>
                         <Menu
                             id="menu-appbar"
@@ -87,17 +99,17 @@ const HeadBar =()=>{
                             open={Boolean(anchorElNav)}
                             onClose={handleCloseNavMenu}
                             sx={{
-                                display: { xs: 'block', md: 'none' },
+                                display: {xs: 'block', md: 'none'},
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                <MenuItem key={page} onClick={()=>handleCloseNavMenu(page)}>
                                     <Typography textAlign="center">{page}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
                     </Box>
-                    <Movie sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+                    <Movie sx={{display: {xs: 'flex', md: 'none'}, mr: 1}}/>
                     <Typography
                         variant="h5"
                         noWrap
@@ -105,7 +117,7 @@ const HeadBar =()=>{
                         href=""
                         sx={{
                             mr: 2,
-                            display: { xs: 'flex', md: 'none' },
+                            display: {xs: 'flex', md: 'none'},
                             flexGrow: 1,
                             fontFamily: 'monospace',
                             fontWeight: 700,
@@ -116,31 +128,33 @@ const HeadBar =()=>{
                     >
                         RESERVO
                     </Typography>
-                    <Box className="my-3 px-5 justify-between ml-10 md:border md:rounded-b-3xl  md:rounded-t-md md:border-gray-600 max-w-md" sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    {haveNav && (<Box
+                        className="my-3 px-5 justify-between ml-10 md:border md:rounded-b-3xl  md:rounded-t-md md:border-gray-600 max-w-2xl"
+                        sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         {pages.map((page) => (
                             <Button
                                 key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
+                                onClick={()=>handleCloseNavMenu(page)}
+                                sx={{my: 2, color: 'white', display: 'block'}}
                             >
                                 {page}
                             </Button>
                         ))}
-                    </Box>
+                    </Box>)}
 
-                    <Box className="space-x-2" sx={{ flexGrow: 0,marginLeft:"auto", marginRight:"0px"}}>
+                    <Box className="space-x-2" sx={{flexGrow: 0, marginLeft: "auto", marginRight: "0px"}}>
                         <Tooltip title="Open github">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0}}>
+                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
                                 <GitHub fontSize="medium" className="text-white"/>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Open twitter">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0}}>
+                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
                                 <Twitter fontSize="medium" className="text-white"/>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Open instagram">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0}}>
+                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
                                 <Instagram fontSize="medium" className="text-white"/>
                             </IconButton>
                         </Tooltip>
@@ -149,7 +163,7 @@ const HeadBar =()=>{
                             Login
                         </button>
                         <Menu
-                            sx={{ mt: '45px' }}
+                            sx={{mt: '45px'}}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
                             anchorOrigin={{

@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import {Paths} from "../../routes/Paths";
 
 const NavBar = () => {
 
@@ -29,8 +30,8 @@ const NavBar = () => {
                             <li>
                                 <p className="text-amber-500 font-bold text-3xl">*</p>
                             </li>
-                            <li >
-                                <NavLink to="/home" className="my-1">Home</NavLink>
+                            <li className="my-1">
+                                <NavLink to={Paths.Home}>Home</NavLink>
                             </li>
                         </ul>
                 </div>

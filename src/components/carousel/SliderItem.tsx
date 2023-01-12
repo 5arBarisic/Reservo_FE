@@ -1,16 +1,21 @@
 import {Card, CardContent, CardMedia, Typography} from "@mui/material";
 import React from "react";
+import {useNavigate} from "react-router-dom";
+import {Paths} from "../../routes/Paths";
 
 type ItemProps = {
     name: string;
     description: string;
+    id:number;
 };
 
 
-const SliderItem = ({name, description}: ItemProps) => {
+const SliderItem = ({name, description,id}: ItemProps) => {
+
+    const navigate = useNavigate();
 
     return (
-        <Card className="min-h-full bg-gradient-to-r from-black via-gray-800 to-orange-800 flex flex-row justify-center gap-x-44">
+        <Card className="min-h-full bg-gradient-to-r from-gray-800 via-gray-900 to-orange-700  flex flex-row justify-center gap-x-72">
             <CardContent className="mt-20 space-y-6">
                 <Typography fontWeight="bold" variant="h4" color="white">
                     {name}
@@ -28,7 +33,8 @@ const SliderItem = ({name, description}: ItemProps) => {
                     "&:hover": { transform: "scale3d(1.05, 1.05, 1)" }}}
                 component="img"
                 image="https://i.pinimg.com/736x/9e/96/0d/9e960d4b33cafe5b256e034723d5120c.jpg"
-                alt="Paella dish"
+                alt="opis slike"
+                onClick={()=>navigate(`${Paths.Movie}/${id}`)}
             />
             {/*
             <div className="flex flex-row gap-x-20">
