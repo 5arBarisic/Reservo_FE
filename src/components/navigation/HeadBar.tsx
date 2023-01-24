@@ -12,10 +12,11 @@ import {
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 
-import React from "react";
+import React, {useContext} from "react";
 import {GitHub, Instagram, Movie, Twitter} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import {Paths} from "../../routes/Paths";
+import {AuthContext} from "../../authConfig/Authentication";
 
 const pages = ['Home', 'Explore more', 'Contact us'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -28,6 +29,7 @@ type HeadBarProps = {
 
 const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
 
+    const { token, saveToken } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -40,9 +42,9 @@ const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = (page:string) => {
+    const handleCloseNavMenu = (page: string) => {
         setAnchorElNav(null);
-        if(page==='Home') navigate(Paths.Home);
+        if (page === 'Home') navigate(Paths.Home);
     };
 
     const handleCloseUserMenu = () => {
@@ -103,7 +105,7 @@ const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page} onClick={()=>handleCloseNavMenu(page)}>
+                                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
                                     <Typography textAlign="center">{page}</Typography>
                                 </MenuItem>
                             ))}
@@ -134,7 +136,7 @@ const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
                         {pages.map((page) => (
                             <Button
                                 key={page}
-                                onClick={()=>handleCloseNavMenu(page)}
+                                onClick={() => handleCloseNavMenu(page)}
                                 sx={{my: 2, color: 'white', display: 'block'}}
                             >
                                 {page}
@@ -158,10 +160,21 @@ const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
                                 <Instagram fontSize="medium" className="text-white"/>
                             </IconButton>
                         </Tooltip>
-                        <button
-                            className="rounded-3xl  border border-white font-bold text-md w-24 h-10">
+                        {token ? <button
+                            className="rounded-3xl hover:bg-orange-600  border border-gray-600 font-bold text-md w-24 h-10"
+                            onClick={()=>{
+                                if(saveToken) saveToken();
+                                navigate(Paths.Home);
+                            }}
+                        >
+                            Logout
+                        </button> : <button
+                            className="rounded-3xl hover:bg-orange-600  border border-gray-600 font-bold text-md w-24 h-10"
+                            onClick={()=>{
+                                navigate(Paths.Login);
+                            }}>
                             Login
-                        </button>
+                        </button>}
                         <Menu
                             sx={{mt: '45px'}}
                             id="menu-appbar"

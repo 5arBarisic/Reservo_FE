@@ -24,8 +24,10 @@ const SliderItem = ({name, description,id}: ItemProps) => {
                     {description}
                 </Typography>
                 <button
-                    className="rounded-3xl p-3 bg-orange-400 hover:text-white  hover:bg-opacity-0 hover:border-2 hover:border-orange-400 font-bold text-lg w-52">
-                    Reserve a seat
+                    className="rounded-2xl p-3 bg-orange-400 hover:text-white  hover:bg-opacity-0 hover:border-2 hover:border-orange-400 font-bold text-lg w-52"
+                    onClick={()=>navigate(`${Paths.Movie}/${id}`)}
+                        >
+                    See more
                 </button>
             </CardContent>
             <CardMedia

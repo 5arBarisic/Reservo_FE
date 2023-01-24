@@ -1,0 +1,7 @@
+.sjedalo:nth-of-type(8n + 2),
+.sjedalo:nth-child(8n + 6) {
+    margin-right: 12px;
+}
+
+
+
