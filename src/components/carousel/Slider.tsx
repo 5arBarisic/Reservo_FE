@@ -21,8 +21,8 @@ const Slider = () => {
         void loadMovies();
     }, []);
 
-    return (
-        <Carousel navButtonsProps={{
+    return (<>
+        {!loading && <Carousel navButtonsProps={{
             style: {
                 backgroundColor: 'deepskyblue'
             }
@@ -31,8 +31,8 @@ const Slider = () => {
                !loading && movies.map((movie) => <SliderItem key={movie.id} name={movie.title} description={movie.description}
                                                   id={movie.id}/>)
             }
-        </Carousel>
-    );
+        </Carousel>}
+    </> );
 };
 
 export default Slider;

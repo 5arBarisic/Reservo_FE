@@ -1,7 +1,11 @@
 import React from "react";
-import {ReservationProps} from "../../pages/ReservationPage";
 
 
+export type ReservationProps = {
+    name: string,
+    price: number,
+    occupied: number[]
+};
 type MovieProps = {
     movie: ReservationProps,
     onChange: (movie: ReservationProps) => void

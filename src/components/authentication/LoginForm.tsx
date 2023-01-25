@@ -21,7 +21,6 @@ const LoginForm = () => {
     const navigate = useNavigate();
 
     const handleSubmit = async (values: LoginProps) => {
-        console.log(values);
         let status: number | undefined;
         let loginResponse: { token: string | undefined } | undefined;
 
