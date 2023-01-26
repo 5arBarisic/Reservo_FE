@@ -4,6 +4,7 @@ export enum Paths {
     Movie = "/movie",
     Reservation = "/reservation",
     Registration = "/registration",
-    Login = "/login"
+    Login = "/login",
+    Profile = "/profile"
 
 }

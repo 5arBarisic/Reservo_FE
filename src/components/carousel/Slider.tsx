@@ -29,7 +29,7 @@ const Slider = () => {
         }} height="400px" animation="fade" autoPlay={true} stopAutoPlayOnHover={true} duration={500}>
             {
                !loading && movies.map((movie) => <SliderItem key={movie.id} name={movie.title} description={movie.description}
-                                                  id={movie.id}/>)
+                                                  id={movie.id} images={movie.images}/>)
             }
         </Carousel>}
     </> );

@@ -24,4 +24,8 @@ const createReservation = async (values:Reservation)=>{
     return axios.post(`/reservations`,values)
 }
 
-export {getMovies, getProjectionById, getProjectionsByMovie,createReservation}
+const getUserReservations = async (id:number|string)=>{
+    return axios.get(`/reservations/${id}`)
+}
+
+export {getMovies, getProjectionById, getProjectionsByMovie,createReservation,getUserReservations}

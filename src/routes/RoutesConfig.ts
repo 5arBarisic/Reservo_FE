@@ -4,6 +4,7 @@ import MoviePage from "../pages/MoviePage";
 import ReservationPage from "../pages/ReservationPage";
 import RegistrationPage from "../pages/RegistrationPage";
 import LoginPage from "../pages/LoginPage";
+import ProfilePage from "../pages/ProfilePage";
 
 type RouteProps = {
     path: string;
@@ -15,7 +16,8 @@ const RoutesConfig: RouteProps [] = [
     { path: Paths.Movie +"/:id", page: MoviePage },
     { path: Paths.Reservation +"/:id", page: ReservationPage },
     {path: Paths.Registration, page: RegistrationPage},
-    {path: Paths.Login, page: LoginPage}
+    {path: Paths.Login, page: LoginPage},
+    {path: Paths.Profile, page: ProfilePage}
 ];
 
 export default RoutesConfig;

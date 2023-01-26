@@ -8,6 +8,7 @@ import {useParams} from "react-router-dom";
 import {AuthContext, getUserEmail} from "../authConfig/Authentication";
 import {getUserByEmail} from "../api/Users/apiCalls";
 import {User} from "../api/Users/types";
+import {useNotification} from "use-toast-notification";
 
 
 const formatDate = (backendDate: string | undefined) => {
@@ -58,6 +59,7 @@ const ReservationPage = () => {
     const [movie_Id, setMovieId] = useState<string>()
     const [projections, setProjections] = useState<Projection[]>([]);
     const [user, setUser] = useState<User>();
+    const notification = useNotification()
     const {token} = useContext(AuthContext);
 
     const loadMovieProjection = useCallback(async (projectionId: string) => {
@@ -85,7 +87,7 @@ const ReservationPage = () => {
             .finally(() => setLoading(false));
     }, [setProjections, setReservedSeats, id])
 
-    const loadUser = async () => {
+    const loadUser = useCallback( async () => {
         setLoading(true);
 
         let email = getUserEmail(token);
@@ -96,7 +98,7 @@ const ReservationPage = () => {
             })
             .catch(() => setUser(undefined))
             .finally(() => setLoading(false));
-    };
+    },[token]);
 
     const submitReservation = async () => {
         let seats: ReservationSeat[] = [];
@@ -112,11 +114,32 @@ const ReservationPage = () => {
             userId:user?.id,
             seats: seats
         }
+        if(reservation.seats?.length===0) {
+            notification.show({
+                message: 'Morata odabrati sjedala za rezervaciju',
+                title: 'Rezervacija neuspješna',
+                variant: 'error'
+            })
+        }
+        else if(user===undefined){
+            notification.show({
+                message: 'Morata se ulogirati za rezervaciju',
+                title: 'Rezervacija neuspješna',
+                variant: 'error'
+            })
+        }
+        else {
 
-        await createReservation(reservation)
-            .catch((error)=>{
-            console.log(error.response.data)
-        }).finally(()=>console.log("bravooo"))
+            await createReservation(reservation)
+                .catch((error) => {
+                    console.log(error.response.data)
+                }).finally(() => notification.show({
+                    message: 'Uspješno ste rezervirali kartu',
+                    title: 'Rezervacija uspješna',
+                    variant: 'success'
+                }))
+
+        }
 
     }
 
@@ -125,7 +148,7 @@ const ReservationPage = () => {
         if (id) void loadMovieProjection(id);
         if (movie_Id) void loadMovieProjections(movie_Id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id, movie_Id, loadMovieProjections, loadMovieProjection]);
+    }, [id, movie_Id, loadMovieProjections, loadMovieProjection,loadUser]);
 
 
     return (<>
@@ -157,7 +180,7 @@ const ReservationPage = () => {
                                     <span
                                         tabIndex={0}
                                         key={seat}
-                                        className='inline-block text-white  text-sm pt-2 font-sans bg-orange-600 w-10 h-8 rounded-t-md  relative top-1 '
+                                        className='inline-block text-white  text-sm pt-2 font-sans bg-orange-500 w-10 h-8 rounded-t-md  relative top-1 '
 
 
                                     >{seat}</span>
@@ -168,7 +191,7 @@ const ReservationPage = () => {
                             <p className="text-white"><span
                                 className="text-orange-600">Cijena:</span> {' '}{selectedSeats.length * 5}{' e'}</p>
                             <button
-                                className=" mt-4 text-white max-w-fit p-3 rounded-2xl border border-orange-400 self-end hover:bg-orange-700"
+                                className=" mt-4 text-white max-w-fit p-3 rounded-xl border border-orange-600 self-end bg-orange-600 hover:bg-gray-800 "
                                 onClick={() => submitReservation()}>Rezerviraj
                             </button>
                         </div>

@@ -14,7 +14,8 @@ const seats_80 = Array.from({length: 8 * 10}, (_, i) => i + 1)
 const seats_64 = Array.from({length: 8 * 8}, (_, i) => i + 1)
 
 const Cinema = ({reservedSeats, selectedSeats, onSelectedSeatsChange, numOfSeats}: CinemaProps) => {
-    function handleSelectedState(seat: number) {
+
+   const handleSelectedState=(seat: number) =>{
         const isSelected = selectedSeats.includes(seat)
         if (isSelected) {
             onSelectedSeatsChange(
@@ -42,9 +43,9 @@ const Cinema = ({reservedSeats, selectedSeats, onSelectedSeatsChange, numOfSeats
                             tabIndex={0}
                             key={seat}
                             className={clsx(
-                                'sjedalo text-white inline-block text-sm pt-2 font-sans bg-gray-600 w-10 h-8 rounded-t-md ease-in-out duration-300 relative top-1 ',
+                                `sjedalo text-white inline-block text-sm pt-2 font-sans ${isSelected ? 'bg-orange-500':'bg-gray-600' } w-10 h-8 rounded-t-md ease-in-out duration-300 relative top-1 `,
                                 !isOccupied && 'hover:cursor-pointer hover:bg-orange-500 hover:scale-125 ',
-                                isSelected && 'bg-orange-600 after:content-none after:absolute after:top-0 after:left-1 after:w-3 after:h-3 after:bg-transparent after:border after:border-solid after:border-orange-400 after:hidden hover:cursor-pointer hover:bg-orange-400 hover:scale-125 ',
+                                isSelected && ' after:content-none after:absolute after:top-0 after:left-1 after:w-3 after:h-3 after:bg-transparent after:border after:border-solid after:border-orange-400 after:hidden hover:cursor-pointer hover:bg-orange-400 hover:scale-125 ',
                                 isOccupied && 'bg-gray-400 ',
                             )}
                             onClick={isOccupied ? undefined : () => handleSelectedState(seat)}

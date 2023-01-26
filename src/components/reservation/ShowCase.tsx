@@ -9,7 +9,7 @@ const ShowCase = () => {
                 <p>Available</p>
             </li>
             <li>
-                <span className="inline-block bg-orange-600 w-8 h-6 rounded-t-md  duration-300 relative top-1"/>
+                <span className="inline-block bg-orange-500 w-8 h-6 rounded-t-md  duration-300 relative top-1"/>
                 <p>Selected</p>
             </li>
             <li>

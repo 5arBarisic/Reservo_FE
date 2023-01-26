@@ -61,8 +61,8 @@ const MoviePage = () => {
             <HeadBar haveBorder={false}/>
             <div className="flex flex-row justify-between">
                 <div className="flex flex-col ml-44 mt-20 gap-y-10 mb-32 items-center">
-                    <p className="text-white text-6xl "> {projections[0]?.movie.title}</p>
-                    <p className="text-white text-2xl">{projections[0]?.movie.description}</p>
+                    <p className="text-orange-600 text-6xl max-w-lg "> {projections[0]?.movie.title}</p>
+                    <p className="text-white text-2xl max-w-lg">{projections[0]?.movie.description}</p>
                     <div className=" flex justify-center px-20">
                         <button
                             className="text-white text-3xl border border-gray-400 rounded-lg p-2 hover:bg-orange-500 hover:border-orange-500">Learn
@@ -82,21 +82,20 @@ const MoviePage = () => {
                     </div>
                 </div>
                 <div>
-                    <CardMedia
+                    {projections[0].movie.images &&  <CardMedia
                         sx={{
                             height: "450px",
                             width: "450px",
                             padding: "10px",
-                            marginTop: "10px",
-                            marginBottom: "10px",
+                            marginTop: "60px",
                             marginRight: "200px",
                             borderRadius: "20px",
                             opacity: "40%"
                         }}
                         component="img"
-                        image="https://i.pinimg.com/736x/9e/96/0d/9e960d4b33cafe5b256e034723d5120c.jpg"
+                        image={projections[0].movie.images[0]?.url}
                         alt="opis slike"
-                    />
+                    />}
                 </div>
             </div>
         </div>}

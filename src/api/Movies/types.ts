@@ -4,8 +4,12 @@ export type Movie = {
     description: string;
     duration_min: number;
     currentRating: number;
+    images: Images[]
 
 };
+export type Images = {
+    url: string;
+}
 export type Seat = {
     id: number;
     row: number;
@@ -30,6 +34,7 @@ export type Projection = {
     auditorium: Auditorium;
     seats: Seat[];
 };
+
 export type ReservationSeat = {
     row: number;
     number: number;
@@ -40,6 +45,11 @@ export type Reservation = {
     price?: number;
     userId?: number;
     seats?: ReservationSeat[];
+}
 
-
+export type ReservationResponse = {
+    id: number;
+    movieProjection: { id: number, movie: Movie, auditorium: Auditorium, screeningTime: string };
+    price: number;
+    seatDto: Seat[];
 }
