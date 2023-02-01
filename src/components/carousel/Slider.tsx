@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import Carousel from 'react-material-ui-carousel';
-import SliderItem from "./SliderItem";
 import {getMovies} from "../../api/Movies/apiCalls";
 import {Movie} from "../../api/Movies/types";
+import NavBar from "../navigation/NavBar";
+import CardItem from "./CardItem";
 
 const Slider = () => {
 
@@ -22,16 +23,17 @@ const Slider = () => {
     }, []);
 
     return (<>
-        {!loading && <Carousel navButtonsProps={{
+        {!loading &&<div className="space-y-4"> <Carousel navButtonsProps={{
             style: {
                 backgroundColor: 'deepskyblue'
             }
         }} height="400px" animation="fade" autoPlay={true} stopAutoPlayOnHover={true} duration={500}>
             {
-               !loading && movies.map((movie) => <SliderItem key={movie.id} name={movie.title} description={movie.description}
-                                                  id={movie.id} images={movie.images}/>)
+               !loading && movies.map((movie) => <CardItem key={movie.id} name={movie.title} description={movie.description}
+                                                           id={movie.id} images={movie.images} inSlider={true}/>)
             }
-        </Carousel>}
+        </Carousel>
+            <NavBar/></div>}
     </> );
 };
 

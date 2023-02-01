@@ -45,6 +45,7 @@ const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
         const handleCloseNavMenu = (page: string) => {
             setAnchorElNav(null);
             if (page === 'Home') navigate(Paths.Home);
+            if (page === 'Explore more') navigate(Paths.Projections);
         };
 
         const handleCloseUserMenu = (setting: string) => {
@@ -70,7 +71,7 @@ const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
                             variant="h6"
                             noWrap
                             component="a"
-                            href="/home"
+                            href="/"
                             sx={{
                                 mr: 2,
                                 display: {xs: 'none', md: 'flex'},

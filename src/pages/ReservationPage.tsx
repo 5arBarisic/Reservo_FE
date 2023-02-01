@@ -87,7 +87,7 @@ const ReservationPage = () => {
             .finally(() => setLoading(false));
     }, [setProjections, setReservedSeats, id])
 
-    const loadUser = useCallback( async () => {
+    const loadUser = useCallback(async () => {
         setLoading(true);
 
         let email = getUserEmail(token);
@@ -98,7 +98,7 @@ const ReservationPage = () => {
             })
             .catch(() => setUser(undefined))
             .finally(() => setLoading(false));
-    },[token]);
+    }, [token]);
 
     const submitReservation = async () => {
         let seats: ReservationSeat[] = [];
@@ -111,24 +111,23 @@ const ReservationPage = () => {
 
             movieProjectionId: projection?.id,
             price: selectedSeats.length * 55,
-            userId:user?.id,
+            userId: user?.id,
             seats: seats
         }
-        if(reservation.seats?.length===0) {
+
+        if (reservation.seats?.length === 0) {
             notification.show({
                 message: 'Morata odabrati sjedala za rezervaciju',
                 title: 'Rezervacija neuspješna',
                 variant: 'error'
             })
-        }
-        else if(user===undefined){
+        } else if (user === undefined) {
             notification.show({
                 message: 'Morata se ulogirati za rezervaciju',
                 title: 'Rezervacija neuspješna',
                 variant: 'error'
             })
-        }
-        else {
+        } else {
 
             await createReservation(reservation)
                 .catch((error) => {
@@ -148,7 +147,7 @@ const ReservationPage = () => {
         if (id) void loadMovieProjection(id);
         if (movie_Id) void loadMovieProjections(movie_Id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id, movie_Id, loadMovieProjections, loadMovieProjection,loadUser]);
+    }, [id, movie_Id, loadMovieProjections, loadMovieProjection, loadUser]);
 
 
     return (<>
@@ -156,8 +155,12 @@ const ReservationPage = () => {
             <div className="font-serif bg-gray-800 text-xl min-h-screen grid scroll-auto gap-y-10">
                 <HeadBar haveBorder={false}/>
                 <div className="text-center flex flex-row gap-x-10">
-                    <div className="ml-20 mt-40">
-                        <ShowCase/>
+                    <div className="ml-20 mt-20 ">
+                        <p className="text-orange-600">Dvorana: </p>
+                        <p className="text-white mt-4 uppercase">{projection?.auditorium.name}</p>
+                        <div className="mt-10">
+                            <ShowCase/>
+                        </div>
                     </div>
                     <div>
                         <Cinema
@@ -189,7 +192,7 @@ const ReservationPage = () => {
                         </div>
                         <div className="flex flex-col w-96">
                             <p className="text-white"><span
-                                className="text-orange-600">Cijena:</span> {' '}{selectedSeats.length * 5}{' e'}</p>
+                                className="text-orange-600">Cijena:</span> {' '}{selectedSeats.length * 55}{' e'}</p>
                             <button
                                 className=" mt-4 text-white max-w-fit p-3 rounded-xl border border-orange-600 self-end bg-orange-600 hover:bg-gray-800 "
                                 onClick={() => submitReservation()}>Rezerviraj

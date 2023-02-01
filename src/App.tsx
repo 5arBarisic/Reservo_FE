@@ -9,10 +9,10 @@ function App() {
         <BrowserRouter>
             <NotificationProvider config={{
                 position: 'top-right',
-                isCloseable: false,
+                isCloseable: true,
                 showTitle: true,
                 showIcon: true,
-                duration: 5,
+                duration: 3,
             }}>
                 <Routes/>
             </NotificationProvider>

@@ -24,8 +24,8 @@ const NavBar = () => {
                             <li>
                                 <p className="text-amber-500 font-bold text-3xl">* *</p>
                             </li>
-                            <li >
-                                <p className="my-1">List of all projections</p>
+                            <li className="my-1" >
+                                <NavLink to={Paths.Projections}>List of all projections</NavLink>
                             </li>
                             <li>
                                 <p className="text-amber-500 font-bold text-3xl">*</p>
