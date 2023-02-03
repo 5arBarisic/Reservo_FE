@@ -43,7 +43,7 @@ const Cinema = ({reservedSeats, selectedSeats, onSelectedSeatsChange, numOfSeats
                             tabIndex={0}
                             key={seat}
                             className={clsx(
-                                `sjedalo text-white inline-block text-sm pt-2 font-sans ${isSelected ? 'bg-orange-500':'bg-gray-600' } w-10 h-8 rounded-t-md ease-in-out duration-300 relative top-1 `,
+                                `sjedalo ${(seats===seats_80 && seat > 64) || (seats===seats_64 && seat > 56)  ? 'text-yellow-300' : 'text-white' }  inline-block text-sm pt-2 font-sans ${isSelected ? 'bg-orange-500':'bg-gray-600' } w-10 h-8 rounded-t-md ease-in-out duration-300 relative top-1 `,
                                 !isOccupied && 'hover:cursor-pointer hover:bg-orange-500 hover:scale-125 ',
                                 isSelected && ' after:content-none after:absolute after:top-0 after:left-1 after:w-3 after:h-3 after:bg-transparent after:border after:border-solid after:border-orange-400 after:hidden hover:cursor-pointer hover:bg-orange-400 hover:scale-125 ',
                                 isOccupied && 'bg-gray-400 ',

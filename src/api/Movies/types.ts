@@ -1,11 +1,22 @@
+import {User} from "../Users/types";
+
 export type Movie = {
     id: number;
     title: string;
     description: string;
     duration_min: number;
     currentRating: number;
-    images: Images[]
+    images: Images[];
+    trailer: string;
 
+};
+
+export type MovieRequest = {
+    title: string;
+    description: string;
+    duration_min: number | string;
+    images: string[];
+    trailer: string;
 };
 export type Images = {
     url: string;
@@ -23,7 +34,6 @@ export type Auditorium = {
     id: number;
     name: string;
     seatsNo: number;
-    timestamp: string;
 
 };
 
@@ -35,6 +45,14 @@ export type Projection = {
     seats: Seat[];
 };
 
+
+export type ProjectionRequest = {
+    screeningTime: string|undefined;
+    auditorium: {id: number | string};
+    movie: {id: number | string};
+
+}
+
 export type ReservationSeat = {
     row: number;
     number: number;
@@ -44,6 +62,7 @@ export type Reservation = {
     movieProjectionId?: number;
     price?: number;
     userId?: number;
+    loyaltyPoints?:number;
     seats?: ReservationSeat[];
 }
 
@@ -51,5 +70,6 @@ export type ReservationResponse = {
     id: number;
     movieProjection: { id: number, movie: Movie, auditorium: Auditorium, screeningTime: string };
     price: number;
+    user: User;
     seatDto: Seat[];
 }

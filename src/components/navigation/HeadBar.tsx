@@ -12,15 +12,16 @@ import {
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 
-import React, {useContext} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import {GitHub, Instagram, Movie, Twitter} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import {Paths} from "../../routes/Paths";
-import {AuthContext} from "../../authConfig/Authentication";
+import {AuthContext, getUserEmail} from "../../authConfig/Authentication";
+import {getUserByEmail} from "../../api/Users/apiCalls";
 
 const pages = ['Home', 'Explore more', 'Contact us'];
-const settings = ['Profile', 'Logout'];
-
+const adminSettings = ['Administration', 'Logout'];
+const userSettings = ['Profile', 'Logout'];
 type HeadBarProps = {
     haveNav?: boolean;
     haveBorder?: boolean;
@@ -28,12 +29,22 @@ type HeadBarProps = {
 };
 
 const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
-
         const {token, saveToken} = useContext(AuthContext);
         const navigate = useNavigate();
-
+        const [role, setRole] = useState<string>("")
         const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
         const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+        const loadUser = useCallback(async () => {
+
+            let email = getUserEmail(token);
+
+            await getUserByEmail(email)
+                .then((response) => {
+                    setRole(response.data.role);
+                })
+                .catch(() => setRole(" "))
+        }, [token]);
 
         const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
             setAnchorElNav(event.currentTarget);
@@ -60,6 +71,23 @@ const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
                 navigate(Paths.Profile)
             }
         }
+
+        const handleCloseAdminMenu = (setting: string) => {
+            setAnchorElUser(null);
+            if (setting === 'Logout') {
+
+                if (saveToken) saveToken();
+                navigate(Paths.Home);
+            }
+
+            if (setting === 'Administration') {
+                navigate(Paths.Administration)
+            }
+        }
+
+        useEffect(() => {
+            void loadUser();
+        }, [loadUser])
 
         return (
             // <AppBar sx={{background: "linear-gradient(0deg, rgba(0,0,0,0.1) 50%, rgba(2,0,36,1) 100%)"}} position="static">
@@ -157,21 +185,21 @@ const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
                         <Box className=" flex flex-row space-x-2 justify-between"
                              sx={{flexGrow: 0, marginLeft: "auto", marginRight: "0px"}}>
                             <Tooltip title="Open github">
-                                <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                <IconButton  sx={{p: 0}}>
                                     <GitHub fontSize="medium" className="text-white"/>
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title="Open twitter">
-                                <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                <IconButton  sx={{p: 0}}>
                                     <Twitter fontSize="medium" className="text-white"/>
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title="Open instagram">
-                                <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                <IconButton  sx={{p: 0}}>
                                     <Instagram fontSize="medium" className="text-white"/>
                                 </IconButton>
                             </Tooltip>
-                            <div> {token ?
+                            <div> {token ? role ==="USER" ?
                                 <Box sx={{flexGrow: 0}}>
                                     <Tooltip title="Open settings">
                                         <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
@@ -194,8 +222,36 @@ const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
                                         open={Boolean(anchorElUser)}
                                         onClose={handleCloseUserMenu}
                                     >
-                                        {settings.map((setting) => (
+                                        {userSettings.map((setting) => (
                                             <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
+                                                <Typography textAlign="center">{setting}</Typography>
+                                            </MenuItem>
+                                        ))}
+                                    </Menu>
+                                </Box> : <Box sx={{flexGrow: 0}}>
+                                    <Tooltip title="Open settings">
+                                        <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                            <Avatar alt="Admin"/>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Menu
+                                        sx={{mt: '45px'}}
+                                        id="menu-appbar"
+                                        anchorEl={anchorElUser}
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        keepMounted
+                                        transformOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        open={Boolean(anchorElUser)}
+                                        onClose={handleCloseAdminMenu}
+                                    >
+                                        {adminSettings.map((setting) => (
+                                            <MenuItem key={setting} onClick={() => handleCloseAdminMenu(setting)}>
                                                 <Typography textAlign="center">{setting}</Typography>
                                             </MenuItem>
                                         ))}
@@ -208,28 +264,6 @@ const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
                                     Login
                                 </button>}
                             </div>
-                            <Menu
-                                sx={{mt: '45px'}}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
-                            >
-                                {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
-                                        <Typography textAlign="center">{setting}</Typography>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
                         </Box>
                     </Toolbar>
                 </Container>

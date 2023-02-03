@@ -4,19 +4,16 @@ import ShowCase from "../components/reservation/ShowCase";
 import HeadBar from "../components/navigation/HeadBar";
 import {createReservation, getProjectionById, getProjectionsByMovie} from "../api/Movies/apiCalls";
 import {Projection, Reservation, ReservationSeat} from "../api/Movies/types";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {AuthContext, getUserEmail} from "../authConfig/Authentication";
 import {getUserByEmail} from "../api/Users/apiCalls";
 import {User} from "../api/Users/types";
 import {useNotification} from "use-toast-notification";
+import {formatDate, handlePrice} from "../utils/functions";
+import {Checkbox, TextField} from "@mui/material";
+import {Paths} from "../routes/Paths";
 
 
-const formatDate = (backendDate: string | undefined) => {
-
-    if (backendDate) return new Date(backendDate).toLocaleDateString('en-GB') +
-        ' ' + new Date(backendDate).getHours() +
-        ':' + new Date(backendDate).getMinutes();
-}
 const seatSorterToObject = (seat: number) => {
 
     const row = Math.ceil(seat / 8);
@@ -58,9 +55,12 @@ const ReservationPage = () => {
     const [projection, setProjection] = useState<Projection>();
     const [movie_Id, setMovieId] = useState<string>()
     const [projections, setProjections] = useState<Projection[]>([]);
+    const [loyalty, setLoyalty] = useState<number | string>(0)
+    const [checked, setChecked] = useState<boolean>(false);
     const [user, setUser] = useState<User>();
     const notification = useNotification()
     const {token} = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const loadMovieProjection = useCallback(async (projectionId: string) => {
         setLoading(true);
@@ -95,11 +95,28 @@ const ReservationPage = () => {
         await getUserByEmail(email)
             .then((response) => {
                 setUser(response.data);
+                setLoyalty(response.data.loyaltyPoints);
             })
             .catch(() => setUser(undefined))
             .finally(() => setLoading(false));
     }, [token]);
 
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setChecked(event.target.checked);
+    };
+
+
+    var price = handlePrice(selectedSeats, projection?.auditorium.seatsNo);
+    var loyaltyRequest = 0;
+    if (checked) {
+        if (price - Number(loyalty) >= 0 && Number(loyalty) >= 0) {
+            price = price - Number(loyalty);
+            loyaltyRequest = Number(loyalty);
+        } else if (price - Number(loyalty) < 0 && Number(loyalty) >= 0) {
+            loyaltyRequest = price;
+            price = 0;
+        }
+    }
     const submitReservation = async () => {
         let seats: ReservationSeat[] = [];
 
@@ -107,15 +124,23 @@ const ReservationPage = () => {
             seats[i] = seatSorterToObject(selectedSeats[i]);
         }
 
+
         let reservation: Reservation = {
 
             movieProjectionId: projection?.id,
-            price: selectedSeats.length * 55,
+            price: price,
+            loyaltyPoints: loyaltyRequest,
             userId: user?.id,
             seats: seats
         }
 
-        if (reservation.seats?.length === 0) {
+        if (user?.loyaltyPoints && loyaltyRequest > user?.loyaltyPoints) {
+            notification.show({
+                message: 'Morata odabrati valjan broj bodova',
+                title: 'Rezervacija neuspješna',
+                variant: 'error'
+            })
+        } else if (reservation.seats?.length === 0) {
             notification.show({
                 message: 'Morata odabrati sjedala za rezervaciju',
                 title: 'Rezervacija neuspješna',
@@ -132,11 +157,11 @@ const ReservationPage = () => {
             await createReservation(reservation)
                 .catch((error) => {
                     console.log(error.response.data)
-                }).finally(() => notification.show({
+                }).then(() => notification.show({
                     message: 'Uspješno ste rezervirali kartu',
                     title: 'Rezervacija uspješna',
                     variant: 'success'
-                }))
+                })).finally(()=>navigate(Paths.Profile));
 
         }
 
@@ -157,7 +182,27 @@ const ReservationPage = () => {
                 <div className="text-center flex flex-row gap-x-10">
                     <div className="ml-20 mt-20 ">
                         <p className="text-orange-600">Dvorana: </p>
-                        <p className="text-white mt-4 uppercase">{projection?.auditorium.name}</p>
+                        <p className="text-white mt-2 uppercase">{projection?.auditorium.name}</p>
+                        <div className="flex flex-row justify-center mt-2">
+                            <p className="text-orange-600 mt-2">Use loyalty points:</p>
+                            <Checkbox
+                                sx={{color: "white"}}
+                                checked={checked}
+                                onChange={handleChange}/>
+                        </div>
+                        <div className="flex justify-center mt-5">
+                            <TextField
+                                sx={{fieldset: {borderColor: "gray"}, maxWidth: "100px", input: {color: 'white'}}}
+                                name="duration_min" type="number"
+                                InputProps={{
+                                    inputProps: {min: 0}
+                                }}
+                                disabled={!checked}
+                                value={loyalty}
+                                onChange={(newValue) => {
+                                    setLoyalty(newValue.target.value);
+                                }}/>
+                        </div>
                         <div className="mt-10">
                             <ShowCase/>
                         </div>
@@ -192,7 +237,7 @@ const ReservationPage = () => {
                         </div>
                         <div className="flex flex-col w-96">
                             <p className="text-white"><span
-                                className="text-orange-600">Cijena:</span> {' '}{selectedSeats.length * 55}{' e'}</p>
+                                className="text-orange-600">Cijena:</span> {' '}{price}{' e'}</p>
                             <button
                                 className=" mt-4 text-white max-w-fit p-3 rounded-xl border border-orange-600 self-end bg-orange-600 hover:bg-gray-800 "
                                 onClick={() => submitReservation()}>Rezerviraj
