@@ -20,35 +20,13 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {formatDate} from "../../utils/functions";
 
 
-const auditoriumTest: Auditorium[] = [
-    {
-        id: 1,
-        name: 'Dvorana 1',
-        seatsNo: 80
-    },
-    {
-        id: 2,
-        name: 'Dvorana 2',
-        seatsNo: 64
-    },
-    {
-        id: 3,
-        name: 'Dvorana 3',
-        seatsNo: 64
-    },
-    {
-        id: 4,
-        name: 'Dvorana 4',
-        seatsNo: 80
-    }
-]
-
 
 const AddProjectionForm = ({
                                movies,
                                projections,
+                               auditoriums,
                                refreshProjections
-                           }: { movies: Movie[], projections: Projection[], refreshProjections: () => void }) => {
+                           }: { movies: Movie[], projections: Projection[], auditoriums: Auditorium[],refreshProjections: () => void }) => {
 
     const [screeningTime, setScreeningTime] = useState<Dayjs | null>(null);
     const [selectedMovie, setSelectedMovie] = useState<number | string>("")
@@ -72,8 +50,8 @@ const AddProjectionForm = ({
 
         const values: ProjectionRequest = {
             screeningTime: newScreeningTime,
-            auditorium: {id: Number(selectedAuditorium)},
-            movie: {id: Number(selectedMovie)}
+            auditoriumId: Number(selectedAuditorium),
+            movieId: Number(selectedMovie)
 
         }
 
@@ -149,7 +127,7 @@ const AddProjectionForm = ({
                     onChange={handleSelectedAuditorium}
                     sx={{minWidth: "300px", fieldset: {borderColor: "gray"}, color: "white"}}
                 >
-                    {auditoriumTest.length > 0 && auditoriumTest.map((auditorium) => {
+                    {auditoriums.length > 0 && auditoriums.map((auditorium) => {
                         return <MenuItem key={auditorium.id} value={auditorium.id}>{auditorium.name}</MenuItem>
                     })}
 

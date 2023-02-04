@@ -2,8 +2,8 @@ import React, {useCallback, useEffect, useState} from "react";
 import {Box, Tab, Tabs} from "@mui/material";
 import HeadBar from "../components/navigation/HeadBar";
 import AddMovieForm from "../components/administration/AddMovieForm";
-import {Movie, Projection, ReservationResponse} from "../api/Movies/types";
-import {getAllProjections, getAllReservations, getMovies} from "../api/Movies/apiCalls";
+import {Auditorium, Movie, Projection, ReservationResponse} from "../api/Movies/types";
+import {getAllAuditoriums, getAllProjections, getAllReservations, getMovies} from "../api/Movies/apiCalls";
 import AddProjectionForm from "../components/administration/AddProjectionForm";
 import Tickets from "../components/administration/Tickets";
 
@@ -48,6 +48,7 @@ const AdministrationPage = () => {
     const [value, setValue] = React.useState(0);
     const [loading, setLoading] = useState(true);
     const [movies, setMovies] = useState<Movie[]>([])
+    const [auditoriums, setAuditoriums] = useState<Auditorium[]>([]);
     const [projections, setProjections] = useState<Projection[]>([]);
     const [reservations, setReservations] = useState<ReservationResponse[]>([])
 
@@ -90,12 +91,21 @@ const AdministrationPage = () => {
 
     }, [])
 
+    const loadAuditoriums = useCallback(async () => {
+        setLoading(true);
+
+        await getAllAuditoriums()
+            .then((response) => setAuditoriums(response.data))
+            .catch(() => setAuditoriums([]))
+            .finally(() => setLoading(false));
+    }, [])
 
     useEffect(() => {
         void loadMovies();
         void loadProjections();
         void loadReservations();
-    }, [loadMovies, loadProjections, loadReservations]);
+        void loadAuditoriums();
+    }, [loadMovies, loadProjections, loadReservations, loadAuditoriums]);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -123,7 +133,7 @@ const AdministrationPage = () => {
                     <AddMovieForm movies={movies} refreshMovies={loadMovies}/>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <AddProjectionForm movies={movies} projections={projections} refreshProjections={loadProjections}/>
+                    <AddProjectionForm movies={movies} auditoriums={auditoriums} projections={projections} refreshProjections={loadProjections}/>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Tickets reservations={reservations}/>

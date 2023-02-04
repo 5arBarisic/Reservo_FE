@@ -55,6 +55,11 @@ const createMovie = async (values: MovieRequest) => {
 
     return axios.post(`/movies`, values)
 }
+const getAllAuditoriums  = async () => {
+
+    return axios.get(`/auditoriums`)
+}
+
 
 export {
     getMovies,
@@ -66,5 +71,6 @@ export {
     getMovieById,
     createProjection,
     getAllProjections,
-    getAllReservations
+    getAllReservations,
+    getAllAuditoriums
 }

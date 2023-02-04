@@ -48,8 +48,8 @@ export type Projection = {
 
 export type ProjectionRequest = {
     screeningTime: string|undefined;
-    auditorium: {id: number | string};
-    movie: {id: number | string};
+    auditoriumId:  number | string;
+    movieId: number | string;
 
 }
 
