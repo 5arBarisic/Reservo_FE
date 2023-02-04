@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {Paths} from "../../routes/Paths";
 import {AuthContext} from "../../authConfig/Authentication";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {useNotification} from "use-toast-notification";
 
 export type LoginProps = {
     email: string;
@@ -19,24 +20,40 @@ const LoginForm = () => {
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const {saveToken} = useContext(AuthContext);
     const navigate = useNavigate();
+    const notification = useNotification()
 
     const handleSubmit = async (values: LoginProps) => {
         let status: number | undefined;
         let loginResponse: { token: string | undefined } | undefined;
 
-        await login(values)
-            .then((response) => {
-                loginResponse = response?.data;
-                status = response?.status;
+        if(values.email===""||values.password===""){
+            notification.show({
+                message: 'Morate ispuniti sva polja',
+                title: 'Greška',
+                variant: 'error'
             })
-            .catch((errors) => {
-                status = errors.response.status;
-            })
-        if (loginResponse && status === 200) {
-            if (saveToken) saveToken(loginResponse.token);
-            navigate(Paths.Home);
         }
-
+        else {
+            await login(values)
+                .then((response) => {
+                    loginResponse = response?.data;
+                    status = response?.status;
+                })
+                .catch((errors) => {
+                    status = errors.response.status;
+                })
+            if (loginResponse && status === 200) {
+                if (saveToken) saveToken(loginResponse.token);
+                navigate(Paths.Home);
+            }
+            if (status === 403) {
+                notification.show({
+                    message: 'Krivo unesen email ili šifra',
+                    title: 'Greška',
+                    variant: 'error'
+                })
+            }
+        }
 
     };
 

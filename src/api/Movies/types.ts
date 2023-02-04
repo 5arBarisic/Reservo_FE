@@ -7,6 +7,7 @@ export type Movie = {
     duration_min: number;
     currentRating: number;
     images: Images[];
+    reviews: ReviewResponse[];
     trailer: string;
 
 };
@@ -79,5 +80,11 @@ export type ReviewResponse = {
     rating: number;
     description: string;
     user: User;
+
+}
+export type ReviewRequest = {
+    rating: number | null | undefined;
+    description: string;
+    userId: number;
 
 }

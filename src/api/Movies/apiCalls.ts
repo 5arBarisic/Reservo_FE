@@ -1,5 +1,5 @@
 import axios from "axios";
-import {MovieRequest, ProjectionRequest, Reservation} from "./types";
+import {MovieRequest, ProjectionRequest, Reservation, ReviewRequest} from "./types";
 
 
 axios.defaults.baseURL = 'http://localhost:8080/api/v1';
@@ -45,7 +45,7 @@ const getUserReservations = async (id: number | string) => {
     return axios.get(`/reservations/${id}`)
 }
 
-const getAllReservations  = async () => {
+const getAllReservations = async () => {
 
     return axios.get(`/reservations`)
 }
@@ -55,9 +55,14 @@ const createMovie = async (values: MovieRequest) => {
 
     return axios.post(`/movies`, values)
 }
-const getAllAuditoriums  = async () => {
+const getAllAuditoriums = async () => {
 
     return axios.get(`/auditoriums`)
+}
+
+const createReview = async (id: number | string, values: ReviewRequest) => {
+
+    return axios.post(`/movies/${id}/review`, values)
 }
 
 
@@ -72,5 +77,6 @@ export {
     createProjection,
     getAllProjections,
     getAllReservations,
-    getAllAuditoriums
+    getAllAuditoriums,
+    createReview
 }

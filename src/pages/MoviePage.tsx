@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useContext, useEffect, useRef, useState} from "react";
 import HeadBar from "../components/navigation/HeadBar";
 import {CardMedia} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
@@ -6,6 +6,11 @@ import {getMovieById, getProjectionsByMovie} from "../api/Movies/apiCalls";
 import {Movie, Projection} from "../api/Movies/types";
 import {Paths} from "../routes/Paths";
 import {formatDate} from "../utils/functions";
+import Review from "../components/reviews/Reviews";
+import AddReview from "../components/reviews/AddReview";
+import {User} from "../api/Users/types";
+import {AuthContext, getUserEmail} from "../authConfig/Authentication";
+import {getUserByEmail} from "../api/Users/apiCalls";
 
 
 export type ProjectionProps = {
@@ -17,9 +22,11 @@ const MoviePage = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const {id} = useParams();
+    const {token, saveToken} = useContext(AuthContext);
     const [projections, setProjections] = useState<Projection[]>([]);
     const [projectionDates, setProjectionDates] = useState<ProjectionProps[]>([]);
     const [movie, setMovie] = useState<Movie>()
+    const [user, setUser] = useState<User>();
 
     const ref = useRef<null | HTMLDivElement>(null);
 
@@ -27,7 +34,6 @@ const MoviePage = () => {
 
         ref.current?.scrollIntoView({behavior: 'smooth'});
     };
-
 
 
     const projectionFormatter = (projection: Projection) => {
@@ -63,11 +69,23 @@ const MoviePage = () => {
 
     }
 
+    const loadUser = useCallback(async () => {
+
+        let email = getUserEmail(token);
+
+        await getUserByEmail(email)
+            .then((response) => {
+                setUser(response.data);
+            })
+            .catch(() => setUser(undefined))
+    }, [token]);
+
 
     useEffect(() => {
         if (id) void loadMovieProjections(id);
+                void loadUser();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id]);
+    }, [id,loadUser]);
 
     return (<>
         <div
@@ -98,7 +116,8 @@ const MoviePage = () => {
                                 </button>
                             })}
 
-                            {projectionDates.length === 0 && <p className="text-white text-xl justify-self-center">COMING SOON</p>}
+                            {projectionDates.length === 0 &&
+                                <p className="text-white text-xl justify-self-center">COMING SOON</p>}
                         </div>
                     </div>
                     <div>
@@ -136,7 +155,7 @@ const MoviePage = () => {
                 <p className="text-4xl text-center text-orange-600 mb-10">About movie</p>
                 <hr className=" h-px bg-orange-500 border-0 mx-24"/>
                 <div className=" flex justify-center">
-                    <div className=" w-full flex mx-24 justify-center rounded-xl mb-20">
+                    <div className=" w-full flex mx-24 justify-center rounded-xl">
                         <iframe className=" mx-56 my-12 rounded-xl"
                                 width="100%" height="450"
                                 src={`https://www.youtube.com/embed/${projections[0]?.movie.trailer ?? movie?.trailer}`}
@@ -144,6 +163,19 @@ const MoviePage = () => {
                                 allowFullScreen
                                 title='trailer'
                         />
+                    </div>
+                </div>
+            </div>
+            <div className={` ${loading ? 'hidden' : 'visible'}`}>
+                <p className="text-4xl text-center text-orange-600 mb-10">User reviews</p>
+                <hr className=" h-px bg-orange-500 border-0 mx-24"/>
+                <div className="flex justify-center mt-2">
+                    <div className=" grid grid-cols-4 gap-x-8 gap-y-5 p-3 ">
+                        {user && id && <AddReview name={user.firstName} movieId={id} userId={user.id} refreshReviews={()=>loadMovieProjections(id)}/>}
+                        {projections[0]?.movie.reviews.length > 0 ? projections[0]?.movie.reviews.map((review) => {
+                            return (<Review key={review.id} name={review.user.firstName} description={review.description}
+                                            rating={review.rating}/>)
+                        }):<p className="text-3xl text-orange-600 h-14">No reviews yet.</p>}
                     </div>
                 </div>
             </div>
