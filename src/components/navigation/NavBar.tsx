@@ -14,8 +14,8 @@ const NavBar = ({ids}: { ids: number[] }) => {
                         <li>
                             <p className="text-amber-500 font-bold text-3xl">*</p>
                         </li>
-                        <li>
-                            <p className="my-1">Experience the cinema</p>
+                        <li className="my-1">
+                            <NavLink to={Paths.AboutUs}>Experience the cinema</NavLink>
                         </li>
                         <li>
                             <p className="text-amber-500 font-bold text-3xl">* *</p>
@@ -34,7 +34,7 @@ const NavBar = ({ids}: { ids: number[] }) => {
                             <p className="text-amber-500 font-bold text-3xl">*</p>
                         </li>
                         <li className="my-1">
-                            <NavLink to={Paths.Home}>Home</NavLink>
+                            <NavLink to={Paths.TicketInfo}>Ticket info</NavLink>
                         </li>
                     </ul>
                 </div>

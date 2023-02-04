@@ -47,7 +47,7 @@ const ProjectionsPage = () => {
             <div className="bg-gray-800">
                 <HeadBar haveNav={true} haveBorder={true}/>
             </div>
-            <p className="text-gray-700 text-4xl mt-4 ml-60">Movies</p>
+            <p className="text-gray-700 text-4xl font-semibold mt-4 ml-60">Movies</p>
             <div className="flex justify-center max-w-2xl mx-auto  mt-4 rounded-6xl">
                 <TextField
                     sx={{input: {color: 'black',marginLeft:'4px'}}}

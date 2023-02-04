@@ -7,6 +7,8 @@ export enum Paths {
     Login = "/login",
     Profile = "/profile",
     Projections = "/projections",
-    Administration = "/administration"
+    Administration = "/administration",
+    AboutUs = "/aboutUs",
+    TicketInfo = "/ticketInfo"
 
 }

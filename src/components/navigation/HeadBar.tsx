@@ -19,7 +19,7 @@ import {Paths} from "../../routes/Paths";
 import {AuthContext, getUserEmail} from "../../authConfig/Authentication";
 import {getUserByEmail} from "../../api/Users/apiCalls";
 
-const pages = ['Home', 'Explore more', 'Contact us'];
+const pages = ['Home', 'Explore more', 'Ticket info' ,'About us'];
 const adminSettings = ['Administration', 'Logout'];
 const userSettings = ['Profile', 'Logout'];
 type HeadBarProps = {
@@ -57,6 +57,8 @@ const HeadBar = ({haveNav = true, haveBorder = true}: HeadBarProps) => {
             setAnchorElNav(null);
             if (page === 'Home') navigate(Paths.Home);
             if (page === 'Explore more') navigate(Paths.Projections);
+            if (page === 'About us') navigate(Paths.AboutUs);
+            if (page === 'Ticket info') navigate(Paths.TicketInfo);
         };
 
         const handleCloseUserMenu = (setting: string) => {

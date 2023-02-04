@@ -7,6 +7,8 @@ import LoginPage from "../pages/LoginPage";
 import ProfilePage from "../pages/ProfilePage";
 import ProjectionsPage from "../pages/ProjectionsPage";
 import AdministrationPage from "../pages/AdministrationPage";
+import AboutUsPage from "../pages/AboutUsPage";
+import TicketInfoPage from "../pages/TicketInfoPage";
 
 type RouteProps = {
     path: string;
@@ -21,7 +23,9 @@ const RoutesConfig: RouteProps [] = [
     {path: Paths.Login, page: LoginPage},
     {path: Paths.Profile, page: ProfilePage},
     {path: Paths.Projections, page: ProjectionsPage},
-    {path: Paths.Administration, page: AdministrationPage}
+    {path: Paths.Administration, page: AdministrationPage},
+    {path: Paths.AboutUs, page: AboutUsPage},
+    {path: Paths.TicketInfo, page: TicketInfoPage}
 ];
 
 export default RoutesConfig;
