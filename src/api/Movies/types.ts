@@ -47,8 +47,8 @@ export type Projection = {
 
 
 export type ProjectionRequest = {
-    screeningTime: string|undefined;
-    auditoriumId:  number | string;
+    screeningTime: string | undefined;
+    auditoriumId: number | string;
     movieId: number | string;
 
 }
@@ -62,7 +62,7 @@ export type Reservation = {
     movieProjectionId?: number;
     price?: number;
     userId?: number;
-    loyaltyPoints?:number;
+    loyaltyPoints?: number;
     seats?: ReservationSeat[];
 }
 
@@ -72,4 +72,12 @@ export type ReservationResponse = {
     price: number;
     user: User;
     seatDto: Seat[];
+}
+
+export type ReviewResponse = {
+    id: number;
+    rating: number;
+    description: string;
+    user: User;
+
 }

@@ -15,26 +15,28 @@ const Slider = () => {
 
         await getMovies()
             .then((response) => setMovies(response.data))
-            .catch(()=>setMovies([]))
-            .finally(()=>setLoading(false));
+            .catch(() => setMovies([]))
+            .finally(() => setLoading(false));
     }
     useEffect(() => {
         void loadMovies();
     }, []);
 
     return (<>
-        {!loading &&<div className="space-y-4"> <Carousel navButtonsProps={{
+        {!loading && <div className="space-y-4"><Carousel navButtonsProps={{
             style: {
                 backgroundColor: 'deepskyblue'
             }
         }} height="400px" animation="fade" autoPlay={true} stopAutoPlayOnHover={true} duration={500}>
             {
-               !loading && movies.map((movie) => <CardItem key={movie.id} name={movie.title} description={movie.description}
-                                                           id={movie.id} images={movie.images} inSlider={true}/>)
+                !loading && movies.map((movie) => <CardItem key={movie.id} name={movie.title}
+                                                            description={movie.description}
+                                                            id={movie.id} images={movie.images} inSlider={true}/>)
             }
         </Carousel>
-            <NavBar/></div>}
-    </> );
+            <NavBar ids={movies.map((m)=>m.id)}/>
+        </div>}
+    </>);
 };
 
 export default Slider;
