@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import {Box, Tab, Tabs} from "@mui/material";
 import HeadBar from "../components/navigation/HeadBar";
 import AddMovieForm from "../components/administration/AddMovieForm";
@@ -6,6 +6,8 @@ import {Auditorium, Movie, Projection, ReservationResponse} from "../api/Movies/
 import {getAllAuditoriums, getAllProjections, getAllReservations, getMovies} from "../api/Movies/apiCalls";
 import AddProjectionForm from "../components/administration/AddProjectionForm";
 import Tickets from "../components/administration/Tickets";
+import {AuthContext, getUserEmail} from "../authConfig/Authentication";
+import {getUserByEmail} from "../api/Users/apiCalls";
 
 
 interface TabPanelProps {
@@ -50,7 +52,9 @@ const AdministrationPage = () => {
     const [movies, setMovies] = useState<Movie[]>([])
     const [auditoriums, setAuditoriums] = useState<Auditorium[]>([]);
     const [projections, setProjections] = useState<Projection[]>([]);
-    const [reservations, setReservations] = useState<ReservationResponse[]>([])
+    const [reservations, setReservations] = useState<ReservationResponse[]>([]);
+    const [role, setRole] = useState<string>("")
+    const {token, saveToken} = useContext(AuthContext);
 
     const loadMovies = useCallback(async () => {
         setLoading(true);
@@ -100,12 +104,24 @@ const AdministrationPage = () => {
             .finally(() => setLoading(false));
     }, [])
 
+    const loadUser = useCallback(async () => {
+
+        let email = getUserEmail(token);
+
+        await getUserByEmail(email)
+            .then((response) => {
+                setRole(response.data.role);
+            })
+            .catch(() => setRole(" "))
+    }, [token]);
+
     useEffect(() => {
         void loadMovies();
         void loadProjections();
         void loadReservations();
         void loadAuditoriums();
-    }, [loadMovies, loadProjections, loadReservations, loadAuditoriums]);
+        void loadUser()
+    }, [loadMovies, loadProjections, loadReservations, loadAuditoriums,loadUser]);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -130,10 +146,10 @@ const AdministrationPage = () => {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <AddMovieForm movies={movies} refreshMovies={loadMovies}/>
+                    <AddMovieForm movies={movies} refreshMovies={loadMovies} role={role}/>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <AddProjectionForm movies={movies} auditoriums={auditoriums} projections={projections} refreshProjections={loadProjections}/>
+                    <AddProjectionForm movies={movies} auditoriums={auditoriums} projections={projections} role={role} refreshProjections={loadProjections}/>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Tickets reservations={reservations}/>

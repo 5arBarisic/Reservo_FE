@@ -17,7 +17,7 @@ import {createMovie} from "../../api/Movies/apiCalls";
 import {useNotification} from "use-toast-notification";
 
 
-const AddMovieForm = ({movies, refreshMovies}: { movies: Movie[], refreshMovies: () => void }) => {
+const AddMovieForm = ({movies, refreshMovies, role}: { movies: Movie[], refreshMovies: () => void, role: string }) => {
 
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -39,7 +39,13 @@ const AddMovieForm = ({movies, refreshMovies}: { movies: Movie[], refreshMovies:
             duration_min: Number(duration),
             trailer: trailer
         }
-        if (title === "" || description === "" || duration === "" || trailer === "" || images[0] === "") {
+        if (role !== 'ADMIN') {
+            notification.show({
+                message: 'Nemate prava za dodavanje',
+                title: 'Greška',
+                variant: 'error'
+            })
+        } else if (title === "" || description === "" || duration === "" || trailer === "" || images[0] === "") {
             notification.show({
                 message: 'Morate ispuniti sva polja',
                 title: 'Greška',

@@ -14,7 +14,6 @@ const formatDate = (backendDate: string | undefined) => {
 
 const ProfileForm = ({user,reservations}: { user: User | undefined ,reservations:ReservationResponse[]|undefined}) => {
 
-    console.log(reservations);
     return (
         <div className=" mx-auto max-w-6xl flex flex-col justify-start gap-y-10 bg-gray-700 mt-4 shadow-md shadow-orange-700 rounded-xl p-10">
             <p className="text-3xl text-white">My profile</p>

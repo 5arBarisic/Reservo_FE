@@ -18,7 +18,6 @@ const AddReview = ({name, movieId, userId, refreshReviews}: { name: string, movi
             description: description,
             userId: userId
         }
-        console.log(values)
         if (description === "" || rating === undefined || rating === null) {
             notification.show({
                 message: 'Morate ispuniti sva polja',

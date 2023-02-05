@@ -20,13 +20,13 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {formatDate} from "../../utils/functions";
 
 
-
 const AddProjectionForm = ({
                                movies,
                                projections,
                                auditoriums,
+                               role,
                                refreshProjections
-                           }: { movies: Movie[], projections: Projection[], auditoriums: Auditorium[],refreshProjections: () => void }) => {
+                           }: { movies: Movie[], projections: Projection[], auditoriums: Auditorium[], role: string, refreshProjections: () => void }) => {
 
     const [screeningTime, setScreeningTime] = useState<Dayjs | null>(null);
     const [selectedMovie, setSelectedMovie] = useState<number | string>("")
@@ -55,7 +55,13 @@ const AddProjectionForm = ({
 
         }
 
-        if (screeningTime === null || selectedAuditorium === "" || selectedMovie === "") {
+        if (role !== 'ADMIN') {
+            notification.show({
+                message: 'Nemate prava za dodavanje',
+                title: 'Greška',
+                variant: 'error'
+            })
+        } else if (screeningTime === null || selectedAuditorium === "" || selectedMovie === "") {
             notification.show({
                 message: 'Morate ispuniti sva polja',
                 title: 'Greška',
