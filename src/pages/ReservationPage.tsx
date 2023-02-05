@@ -134,7 +134,13 @@ const ReservationPage = () => {
             seats: seats
         }
 
-        if ((user?.loyaltyPoints && Number(loyaltyRequest) > user?.loyaltyPoints) ||(user?.loyaltyPoints===undefined)
+        if (user === undefined) {
+            notification.show({
+                message: 'Morate se ulogirati za rezervaciju',
+                title: 'Rezervacija neuspješna',
+                variant: 'error'
+            })
+        } else if ((user?.loyaltyPoints && Number(loyaltyRequest) > user?.loyaltyPoints) || (user?.loyaltyPoints === undefined)
         ) {
             notification.show({
                 message: 'Morate odabrati valjan broj bodova',
@@ -144,12 +150,6 @@ const ReservationPage = () => {
         } else if (reservation.seats?.length === 0) {
             notification.show({
                 message: 'Morate odabrati sjedala za rezervaciju',
-                title: 'Rezervacija neuspješna',
-                variant: 'error'
-            })
-        } else if (user === undefined) {
-            notification.show({
-                message: 'Morate se ulogirati za rezervaciju',
                 title: 'Rezervacija neuspješna',
                 variant: 'error'
             })
@@ -188,7 +188,7 @@ const ReservationPage = () => {
                         <div className="flex flex-row justify-center mt-2">
                             <p className="text-orange-600 mt-2">Use loyalty points:</p>
                             <Checkbox
-                                disabled={loyalty===0}
+                                disabled={loyalty === 0}
                                 sx={{color: "white"}}
                                 checked={checked}
                                 onChange={handleChange}/>
@@ -200,7 +200,7 @@ const ReservationPage = () => {
                                 InputProps={{
                                     inputProps: {min: 0}
                                 }}
-                                disabled={!checked || loyalty===0}
+                                disabled={!checked || loyalty === 0}
                                 value={loyalty}
                                 onChange={(newValue) => {
                                     setLoyalty(newValue.target.value);
