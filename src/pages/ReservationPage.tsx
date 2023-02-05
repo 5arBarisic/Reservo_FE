@@ -237,7 +237,7 @@ const ReservationPage = () => {
                         </div>
                         <div className="flex flex-col w-96">
                             <p className="text-white"><span
-                                className="text-orange-600">Cijena:</span> {' '}{price}{' e'}</p>
+                                className="text-orange-600">Cijena:</span> {' '}{price}{' €'}</p>
                             <button
                                 className=" mt-4 text-white max-w-fit p-3 rounded-xl border border-orange-600 self-end bg-orange-600 hover:bg-gray-800 "
                                 onClick={() => submitReservation()}>Rezerviraj

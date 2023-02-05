@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {Paths} from "../../routes/Paths";
 import {AuthContext} from "../../authConfig/Authentication";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {useNotification} from "use-toast-notification";
 
 export type RegistrationProps = {
 
@@ -22,24 +23,33 @@ const RegistrationForm = () => {
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const {saveToken} = useContext(AuthContext);
     const navigate = useNavigate();
+    const notification = useNotification()
 
     const handleSubmit = async (values: RegistrationProps) => {
         let status: number | undefined;
         let registerResponse: { token: string | undefined } | undefined;
 
-        await register(values)
-            .then((response) => {
-                registerResponse = response?.data;
-                status = response?.status;
+        if (values.firstName === "" || values.lastName === "" || values.email === "" || values.password === "") {
+            notification.show({
+                message: 'Morate ispuniti sva polja',
+                title: 'Greška',
+                variant: 'error'
             })
-            .catch((errors) => {
-                status = errors.response.status;
-            })
-        if (registerResponse && status === 200) {
-            if (saveToken) saveToken(registerResponse.token);
-            navigate(Paths.Home);
-        }
+        } else {
+            await register(values)
+                .then((response) => {
+                    registerResponse = response?.data;
+                    status = response?.status;
+                })
+                .catch((errors) => {
+                    status = errors.response.status;
+                })
+            if (registerResponse && status === 200) {
+                if (saveToken) saveToken(registerResponse.token);
+                navigate(Paths.Home);
+            }
 
+        }
 
     };
 
