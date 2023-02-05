@@ -44,7 +44,7 @@ const Tickets = ({
                                 </TableCell>
                                 <TableCell align="center">{row.movieProjection.auditorium.name}</TableCell>
                                 <TableCell align="center">{formatDate(row.movieProjection.screeningTime)}</TableCell>
-                                <TableCell align="center">{row.price}{' e'}</TableCell>
+                                <TableCell align="center">{row.price}{' €'}</TableCell>
 
                                 <TableCell align="center">{row.seatDto.map((seat, index) =>
                                         <span key={seat.id}>
