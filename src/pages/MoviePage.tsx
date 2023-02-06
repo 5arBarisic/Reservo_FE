@@ -145,7 +145,7 @@ const MoviePage = () => {
                                 opacity: "40%"
                             }}
                             component="img"
-                            image={movie?.images[0].url}
+                            image={movie?.images[0]?.url}
                             alt="opis slike"
                         />}
                     </div>
@@ -171,7 +171,7 @@ const MoviePage = () => {
                 <hr className=" h-px bg-orange-500 border-0 mx-24"/>
                 <div className="flex justify-center mt-2">
                     <div className=" grid grid-cols-4 gap-x-8 gap-y-5 p-3 ">
-                        {user && id && <AddReview name={user.firstName} movieId={id} userId={user.id} refreshReviews={()=>loadMovieProjections(id)}/>}
+                        {user && id && projections.length > 0 && <AddReview name={user.firstName} movieId={id} userId={user.id} refreshReviews={()=>loadMovieProjections(id)}/>}
                         {projections[0]?.movie.reviews.length > 0 ? projections[0]?.movie.reviews.map((review) => {
                             return (<Review key={review.id} name={review.user.firstName} description={review.description}
                                             rating={review.rating}/>)

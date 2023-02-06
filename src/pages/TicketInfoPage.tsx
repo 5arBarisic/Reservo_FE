@@ -25,8 +25,7 @@ const TicketInfo = () => {
                     <div className="text-right mt-7">
                         <p className="text-yellow-400 text-3xl"> Loyalty rewards:</p>
                         <p className="text-white text-xl "> Watch your new favorite movies even more frequently, but under big discounts by collecting loyalty points!</p>
-                        <p className="text-white text-xl "> Per regular seat you get 1 points</p>
-                        <p className="text-white text-xl "> Per VIP seat you get 3 points</p>
+                        <p className="text-white text-xl font-bold"> The more you reserve the more you get!</p>
                     </div>
                 </div>
 
